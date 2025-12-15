@@ -1,9 +1,354 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-    <title>대한철강</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>대한철강 고객만족도 조사</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
+    <style>
+        :root {
+            --primary: #2C3E50;
+            --accent: #E67E22;
+            --bg: #F4F6F7;
+            --white: #ffffff;
+            --border: #D5DBDB;
+        }
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background: var(--bg);
+            color: #333;
+            margin: 0; padding: 20px;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 720px; margin: 0 auto;
+            background: var(--white);
+            padding: 40px 30px; border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-top: 6px solid var(--primary);
+        }
+        header { text-align: center; margin-bottom: 40px; }
+        h1 { color: var(--primary); margin: 0; font-size: 1.8rem; letter-spacing: -1px; font-weight: 800; }
+        .subtitle { font-size: 0.95rem; color: #666; margin-top: 10px; }
+        
+        .section { margin-bottom: 40px; padding-bottom: 30px; border-bottom: 1px solid #eee; }
+        .section:last-child { border-bottom: none; }
+        .sec-title {
+            font-size: 1.2rem; font-weight: 700; color: var(--primary);
+            margin-bottom: 20px; padding-left: 10px; border-left: 4px solid var(--accent);
+        }
+
+        .q-group { margin-bottom: 25px; }
+        .q-label { font-weight: 600; font-size: 1rem; margin-bottom: 10px; display: block; word-break: keep-all; }
+        .sub-q { margin-top: 10px; padding: 15px; background: #f8f9fa; border-radius: 6px; font-size: 0.9rem; }
+        
+        input[type="text"], input[type="tel"] {
+            width: 100%; padding: 12px; border: 1px solid var(--border);
+            border-radius: 4px; box-sizing: border-box; font-size: 1rem;
+            background: #fff;
+        }
+        textarea {
+            width: 100%; padding: 12px; border: 1px solid var(--border);
+            border-radius: 4px; box-sizing: border-box; font-size: 0.95rem; min-height: 80px; resize: vertical;
+            background: #fff;
+        }
+
+        /* 점수 버튼 */
+        .score-container { display: flex; justify-content: space-between; gap: 5px; }
+        .score-box { position: relative; width: 100%; }
+        .score-input { display: none; }
+        .score-label {
+            display: block; width: 100%; padding: 12px 0;
+            text-align: center; background: #fff; border: 1px solid var(--border);
+            border-radius: 4px; cursor: pointer; transition: 0.2s;
+            font-weight: 600; color: #777;
+        }
+        .score-input:checked + .score-label {
+            background: var(--primary); color: #fff; border-color: var(--primary);
+        }
+        .score-text {
+            display: flex; justify-content: space-between; font-size: 0.75rem; color: #888; margin-top: 5px; padding: 0 5px;
+        }
+
+        /* 체크박스 그리드 */
+        .check-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 8px; }
+        .chk-label {
+            display: flex; align-items: center; padding: 8px; background: #fff;
+            border: 1px solid var(--border); border-radius: 4px; font-size: 0.85rem; cursor: pointer;
+        }
+        .chk-input { margin-right: 8px; }
+
+        .submit-btn {
+            width: 100%; padding: 18px; background: var(--primary); color: #fff;
+            border: none; border-radius: 6px; font-size: 1.1rem; font-weight: 700;
+            cursor: pointer; margin-top: 20px; transition: 0.3s;
+        }
+        .submit-btn:hover { background: #1a252f; }
+        
+        @media (max-width: 480px) {
+            .container { padding: 30px 20px; }
+            .check-grid { grid-template-columns: 1fr; }
+            .input-row { flex-direction: column; }
+        }
+        
+        .input-row { display: flex; gap: 10px; margin-bottom: 15px; }
+        .input-item { flex: 1; }
+    </style>
 </head>
 <body>
-    <h1>대한철강 웹앱</h1>
+
+<div class="container">
+    <header>
+        <h1>대한철강</h1>
+        <div class="subtitle">건설현장 고객만족도 설문조사</div>
+    </header>
+
+    <form id="surveyForm">
+        
+        <div class="section">
+            <div class="sec-title">기본 정보</div>
+            <div class="q-group">
+                <label class="q-label">현장명</label>
+                <input type="text" name="siteName" required placeholder="예: 00건설 광주 현장">
+            </div>
+            
+            <div class="input-row">
+                <div class="input-item">
+                    <label class="q-label">건설사명</label>
+                    <input type="text" name="company" required placeholder="예: 대한건설">
+                </div>
+                <div class="input-item">
+                    <label class="q-label">부서명</label>
+                    <input type="text" name="dept" placeholder="예: 공무팀">
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-item">
+                    <label class="q-label">담당자명</label>
+                    <input type="text" name="managerName" required>
+                </div>
+                <div class="input-item">
+                    <label class="q-label">연락처</label>
+                    <input type="tel" name="phone" required placeholder="010-0000-0000">
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="sec-title">1. 가공 납기 및 품질</div>
+
+            <div class="q-group">
+                <label class="q-label">1. 요청한 납기일을 준수 하였다.</label>
+                <div class="score-container" id="q1-box"></div>
+                <div class="score-text"><span>전혀아님(1)</span><span>매우그렇다(5)</span></div>
+            </div>
+
+            <div class="q-group">
+                <label class="q-label">2. 긴급발주 대응이 원활 하였다.</label>
+                <div class="score-container" id="q2-box"></div>
+            </div>
+
+            <div class="q-group">
+                <label class="q-label">3. 가공품과 송장이 일치 하였다.</label>
+                <div class="score-container" id="q3-box"></div>
+            </div>
+
+            <div class="q-group">
+                <label class="q-label">4. 오가공품 발생을 최소화 하였다.</label>
+                <div class="score-container" id="q4-box"></div>
+                <div class="sub-q">
+                    <div style="margin-bottom:5px; font-weight:600;">⚠️ 이상 발생 시 유형 선택 (복수선택)</div>
+                    <div class="check-grid">
+                        <label class="chk-label"><input type="checkbox" name="q4_1" value="Crack" class="chk-input">Crack</label>
+                        <label class="chk-label"><input type="checkbox" name="q4_1" value="녹발청" class="chk-input">녹 발청</label>
+                        <label class="chk-label"><input type="checkbox" name="q4_1" value="휨발생" class="chk-input">휨 발생</label>
+                        <label class="chk-label"><input type="checkbox" name="q4_1" value="각도불량" class="chk-input">각도 불량</label>
+                        <label class="chk-label"><input type="checkbox" name="q4_1" value="치수불량" class="chk-input">치수 불량</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="q-group">
+                <label class="q-label">5. 누락품 및 수량부족 발생을 최소화 하였다.</label>
+                <div class="score-container" id="q5-box"></div>
+            </div>
+
+            <div class="q-group">
+                <label class="q-label">6. 차량 적재 안전 및 상하차가 용이 하였다.</label>
+                <div class="score-container" id="q6-box"></div>
+                <div class="sub-q">
+                    <div style="margin-bottom:5px; font-weight:600;">⚠️ 이상 발생 시 유형 선택</div>
+                    <div class="check-grid">
+                        <label class="chk-label"><input type="checkbox" name="q6_1" value="과적위험" class="chk-input">과적 위험</label>
+                        <label class="chk-label"><input type="checkbox" name="q6_1" value="분리상차미흡" class="chk-input">분리 상차 미흡</label>
+                        <label class="chk-label"><input type="checkbox" name="q6_1" value="고임목미흡" class="chk-input">고임목 미흡</label>
+                        <label class="chk-label"><input type="checkbox" name="q6_1" value="바구니상차불량" class="chk-input">바구니 상차 불량</label>
+                        <label class="chk-label"><input type="checkbox" name="q6_1" value="차량기사비협조" class="chk-input">차량기사 비협조</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="q-group">
+                <label class="q-label">7. 단위 묶음 포장 및 바구니 결속이 견고 하였다.</label>
+                <div class="score-container" id="q7-box"></div>
+                <div class="sub-q">
+                    <div style="margin-bottom:5px; font-weight:600;">⚠️ 이상 발생 시 유형 선택</div>
+                    <div class="check-grid">
+                        <label class="chk-label"><input type="checkbox" name="q7_1" value="과포장" class="chk-input">과포장</label>
+                        <label class="chk-label"><input type="checkbox" name="q7_1" value="단위묶음불량" class="chk-input">단위 묶음 불량</label>
+                        <label class="chk-label"><input type="checkbox" name="q7_1" value="바구니불량" class="chk-input">바구니 불량</label>
+                        <label class="chk-label"><input type="checkbox" name="q7_1" value="결속불량" class="chk-input">결속 불량</label>
+                        <label class="chk-label"><input type="checkbox" name="q7_1" value="Tag불량" class="chk-input">Tag 불량</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="q-group">
+                <label class="q-label">8. 25톤미만 소운반에 적극적인 대응을 하였다.</label>
+                <div class="score-container" id="q8-box"></div>
+            </div>
+
+            <div class="q-group">
+                <label class="q-label">9. 내진용철근 및 커플러 납기 관련 적극 대응 하였다.</label>
+                <div class="score-container" id="q9-box"></div>
+            </div>
+
+            <div class="q-group">
+                <label class="q-label">10. 담당자 주기적 현장방문 및 대응력에 만족한다.</label>
+                <div class="score-container" id="q10-box"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="sec-title">2. SHOP DWG 납기 및 품질</div>
+            
+            <div class="q-group">
+                <label class="q-label">1. 사전납품협의시 SHOP 방침협의를 진행 하였다.</label>
+                <div class="score-container" id="q11-box"></div>
+            </div>
+
+            <div class="q-group">
+                <label class="q-label">2. 담당자 건축/구조도면 이해도 및 소통이 원활 하였다.</label>
+                <div class="score-container" id="q12-box"></div>
+            </div>
+
+            <div class="q-group">
+                <label class="q-label">3. 건축 및 구조도면 관련 사전점검을 진행 하였다.</label>
+                <div class="score-container" id="q13-box"></div>
+            </div>
+
+            <div class="q-group">
+                <label class="q-label">4. SHOP DWG 납기일을 준수 하였다.</label>
+                <div class="score-container" id="q14-box"></div>
+            </div>
+
+            <div class="q-group">
+                <label class="q-label">5. 수정 및 설계변경 관련 적극적인 대응을 하였다.</label>
+                <div class="score-container" id="q15-box"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="sec-title">3. 개선 요청 사항 (자유 기재)</div>
+            
+            <div class="q-group">
+                <label class="q-label">원가절감 및 서비스 대응 관련</label>
+                <textarea name="opinion1" placeholder="예: 전산 시스템 도면 등록 불편 등"></textarea>
+            </div>
+            <div class="q-group">
+                <label class="q-label">가공철근 납기 및 품질 관련</label>
+                <textarea name="opinion2" placeholder="예: 소량 주문 시 대응 소극적 등"></textarea>
+            </div>
+            <div class="q-group">
+                <label class="q-label">SHOP 납기 및 품질 관련</label>
+                <textarea name="opinion3" placeholder="예: 복재열 분류 작성 시 상세 차등 등"></textarea>
+            </div>
+            <div class="q-group">
+                <label class="q-label">타사와 차별화 / 기타 의견</label>
+                <textarea name="opinion4" placeholder="자유롭게 작성해 주세요."></textarea>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn">설문 제출하기</button>
+
+    </form>
+</div>
+
+<script>
+    // ✅ 전달주신 웹 앱 URL 적용
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxveeswlkHKnCvG19S9UJdKmeoiHR3Ga7c1zmg-pYVHnRSeJa0bR-DjpAIntV9aMXw/exec';
+
+    // 1~5점 버튼 생성
+    function createScoreButtons(qId, name) {
+        let html = '';
+        for(let i=1; i<=5; i++) {
+            html += `<label class="score-box">
+                        <input type="radio" name="${name}" value="${i}" class="score-input" required>
+                        <span class="score-label">${i}</span>
+                     </label>`;
+        }
+        document.getElementById(qId).innerHTML = html;
+    }
+
+    // 문항 ID 재매핑 (가공: 1~10 / SHOP: 11~15)
+    createScoreButtons('q1-box', 'q1');
+    createScoreButtons('q2-box', 'q2');
+    createScoreButtons('q3-box', 'q3');
+    createScoreButtons('q4-box', 'q4');
+    createScoreButtons('q5-box', 'q5');
+    createScoreButtons('q6-box', 'q6');
+    createScoreButtons('q7-box', 'q7');
+    createScoreButtons('q8-box', 'q8');
+    createScoreButtons('q9-box', 'q9');
+    createScoreButtons('q10-box', 'q10');
+    createScoreButtons('q11-box', 'q11');
+    createScoreButtons('q12-box', 'q12');
+    createScoreButtons('q13-box', 'q13');
+    createScoreButtons('q14-box', 'q14');
+    createScoreButtons('q15-box', 'q15');
+
+    // 전송 로직
+    const form = document.getElementById('surveyForm');
+    const submitBtn = document.querySelector('.submit-btn');
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        
+        submitBtn.disabled = true;
+        submitBtn.textContent = "전송 중입니다...";
+
+        const formData = new FormData(form);
+        const data = {};
+        
+        for (let [key, value] of formData.entries()) {
+            if (data[key]) {
+                if (!Array.isArray(data[key])) {
+                    data[key] = [data[key]];
+                }
+                data[key].push(value);
+            } else {
+                data[key] = value;
+            }
+        }
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(() => {
+            alert('소중한 의견 감사합니다.\n성공적으로 제출되었습니다.');
+            window.location.reload();
+        })
+        .catch(error => {
+            alert('전송 실패. 다시 시도해주세요.');
+            submitBtn.disabled = false;
+            submitBtn.textContent = "설문 제출하기";
+        });
+    });
+</script>
+
 </body>
 </html>
